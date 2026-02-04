@@ -1,4 +1,4 @@
-# Render Blueprint – Strapi backend (backend-only repo: no rootDir; use this at repo root)
+# Render Blueprint – Strapi backend (backend-only repo)
 # After deploy: Render Dashboard → strapi → Environment → add real values (from .env):
 # APP_KEYS, API_TOKEN_SALT, ADMIN_JWT_SECRET, TRANSFER_TOKEN_SALT, JWT_SECRET (required for users-permissions), ENCRYPTION_KEY, STRIPE_SECRET_KEY.
 
@@ -6,10 +6,13 @@ services:
   - type: web
     name: strapi
     runtime: node
-    buildCommand: npm install && npm run build
+    # strapi v5 needs TypeScript (in devDependencies) to build, so we must include dev deps
+    buildCommand: npm install --include=dev && npm run build
     startCommand: npm run start
     plan: free
     envVars:
+      - key: NODE_VERSION
+        value: 20.11.0
       - key: NODE_ENV
         value: production
       - key: HOST
